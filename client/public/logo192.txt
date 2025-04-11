@@ -1,0 +1,2 @@
+This is a placeholder for the logo192.png file.
+In a real project, you would have a proper .png file here.

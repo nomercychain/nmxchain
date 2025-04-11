@@ -1,0 +1,121 @@
+syntax = "proto3";
+package nomercychain.nmxchain.dynacontract;
+
+import "gogoproto/gogo.proto";
+import "google/api/annotations.proto";
+import "cosmos/base/query/v1beta1/pagination.proto";
+import "cosmos/base/v1beta1/coin.proto";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/any.proto";
+
+option go_package = "github.com/nomercychain/nmxchain/x/dynacontract/types";
+
+// DynaContractType defines the type of dynamic contract
+enum DynaContractType {
+  option (gogoproto.goproto_enum_prefix) = false;
+  
+  DYNA_CONTRACT_TYPE_UNSPECIFIED = 0 [(gogoproto.enumvalue_customname) = "DynaContractTypeUnspecified"];
+  DYNA_CONTRACT_TYPE_STANDARD = 1 [(gogoproto.enumvalue_customname) = "DynaContractTypeStandard"];
+  DYNA_CONTRACT_TYPE_ADAPTIVE = 2 [(gogoproto.enumvalue_customname) = "DynaContractTypeAdaptive"];
+  DYNA_CONTRACT_TYPE_LEARNING = 3 [(gogoproto.enumvalue_customname) = "DynaContractTypeLearning"];
+  DYNA_CONTRACT_TYPE_PREDICTIVE = 4 [(gogoproto.enumvalue_customname) = "DynaContractTypePredictive"];
+  DYNA_CONTRACT_TYPE_AUTONOMOUS = 5 [(gogoproto.enumvalue_customname) = "DynaContractTypeAutonomous"];
+}
+
+// DynaContract defines a dynamic contract
+message DynaContract {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  string creator = 4 [(gogoproto.moretags) = "yaml:\"creator\""];
+  string owner = 5 [(gogoproto.moretags) = "yaml:\"owner\""];
+  DynaContractType contract_type = 6 [(gogoproto.moretags) = "yaml:\"contract_type\""];
+  string status = 7;
+  string code_hash = 8 [(gogoproto.moretags) = "yaml:\"code_hash\""];
+  bytes code = 9;
+  bytes abi = 10;
+  string agent_id = 11 [(gogoproto.moretags) = "yaml:\"agent_id\""];
+  bytes state = 12;
+  bytes metadata = 13;
+  google.protobuf.Timestamp created_at = 14 [(gogoproto.stdtime) = true, (gogoproto.nullable) = false];
+  google.protobuf.Timestamp updated_at = 15 [(gogoproto.stdtime) = true, (gogoproto.nullable) = false];
+  repeated string tags = 16;
+  uint64 gas_limit = 17 [(gogoproto.moretags) = "yaml:\"gas_limit\""];
+  uint64 execution_count = 18 [(gogoproto.moretags) = "yaml:\"execution_count\""];
+}
+
+// DynaContractExecution defines an execution of a dynamic contract
+message DynaContractExecution {
+  string id = 1;
+  string contract_id = 2 [(gogoproto.moretags) = "yaml:\"contract_id\""];
+  string caller = 3 [(gogoproto.moretags) = "yaml:\"caller\""];
+  bytes input = 4;
+  bytes output = 5;
+  string status = 6;
+  uint64 gas_used = 7 [(gogoproto.moretags) = "yaml:\"gas_used\""];
+  string error = 8;
+  google.protobuf.Timestamp timestamp = 9 [(gogoproto.stdtime) = true, (gogoproto.nullable) = false];
+  bytes state_before = 10;
+  bytes state_after = 11;
+  bytes metadata = 12;
+}
+
+// DynaContractTemplate defines a template for dynamic contracts
+message DynaContractTemplate {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  string creator = 4 [(gogoproto.moretags) = "yaml:\"creator\""];
+  DynaContractType contract_type = 5 [(gogoproto.moretags) = "yaml:\"contract_type\""];
+  bytes code = 6;
+  bytes abi = 7;
+  bytes metadata = 8;
+  google.protobuf.Timestamp created_at = 9 [(gogoproto.stdtime) = true, (gogoproto.nullable) = false];
+  google.protobuf.Timestamp updated_at = 10 [(gogoproto.stdtime) = true, (gogoproto.nullable) = false];
+  repeated string tags = 11;
+  uint64 usage_count = 12 [(gogoproto.moretags) = "yaml:\"usage_count\""];
+}
+
+// DynaContractLearningData defines learning data for a dynamic contract
+message DynaContractLearningData {
+  string id = 1;
+  string contract_id = 2 [(gogoproto.moretags) = "yaml:\"contract_id\""];
+  string data_type = 3 [(gogoproto.moretags) = "yaml:\"data_type\""];
+  bytes data = 4;
+  string source = 5;
+  google.protobuf.Timestamp timestamp = 6 [(gogoproto.stdtime) = true, (gogoproto.nullable) = false];
+  bytes metadata = 7;
+}
+
+// DynaContractPermission defines permissions for a dynamic contract
+message DynaContractPermission {
+  string contract_id = 1 [(gogoproto.moretags) = "yaml:\"contract_id\""];
+  string address = 2;
+  string permission_type = 3 [(gogoproto.moretags) = "yaml:\"permission_type\""];
+  google.protobuf.Timestamp granted_at = 4 [(gogoproto.stdtime) = true, (gogoproto.nullable) = false];
+  google.protobuf.Timestamp expires_at = 5 [(gogoproto.stdtime) = true, (gogoproto.nullable) = false];
+  string granted_by = 6 [(gogoproto.moretags) = "yaml:\"granted_by\""];
+  bytes metadata = 7;
+}
+
+// Params defines the parameters for the dynacontract module
+message Params {
+  option (gogoproto.goproto_stringer) = false;
+  
+  uint64 max_contract_size = 1 [(gogoproto.moretags) = "yaml:\"max_contract_size\""];
+  uint64 max_contract_gas = 2 [(gogoproto.moretags) = "yaml:\"max_contract_gas\""];
+  uint64 max_learning_data_size = 3 [(gogoproto.moretags) = "yaml:\"max_learning_data_size\""];
+  uint64 max_metadata_size = 4 [(gogoproto.moretags) = "yaml:\"max_metadata_size\""];
+  cosmos.base.v1beta1.Coin min_contract_deposit = 5 [(gogoproto.nullable) = false];
+  string execution_fee_rate = 6 [(gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec", (gogoproto.nullable) = false];
+}
+
+// GenesisState defines the dynacontract module's genesis state
+message GenesisState {
+  repeated DynaContract contracts = 1 [(gogoproto.nullable) = false];
+  repeated DynaContractExecution executions = 2 [(gogoproto.nullable) = false];
+  repeated DynaContractTemplate templates = 3 [(gogoproto.nullable) = false];
+  repeated DynaContractLearningData learning_data = 4 [(gogoproto.nullable) = false];
+  repeated DynaContractPermission permissions = 5 [(gogoproto.nullable) = false];
+  Params params = 6 [(gogoproto.nullable) = false];
+}

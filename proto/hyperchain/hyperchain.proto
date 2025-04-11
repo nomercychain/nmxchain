@@ -1,0 +1,170 @@
+syntax = "proto3";
+package nomercychain.nmxchain.hyperchain;
+
+import "gogoproto/gogo.proto";
+import "google/api/annotations.proto";
+import "cosmos/base/query/v1beta1/pagination.proto";
+import "cosmos/base/v1beta1/coin.proto";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/any.proto";
+
+option go_package = "github.com/nomercychain/nmxchain/x/hyperchain/types";
+
+// HyperchainType defines the type of hyperchain
+enum HyperchainType {
+  option (gogoproto.goproto_enum_prefix) = false;
+  
+  HYPERCHAIN_TYPE_UNSPECIFIED = 0 [(gogoproto.enumvalue_customname) = "HyperchainTypeUnspecified"];
+  HYPERCHAIN_TYPE_STANDARD = 1 [(gogoproto.enumvalue_customname) = "HyperchainTypeStandard"];
+  HYPERCHAIN_TYPE_SPECIALIZED = 2 [(gogoproto.enumvalue_customname) = "HyperchainTypeSpecialized"];
+  HYPERCHAIN_TYPE_PRIVATE = 3 [(gogoproto.enumvalue_customname) = "HyperchainTypePrivate"];
+  HYPERCHAIN_TYPE_ENTERPRISE = 4 [(gogoproto.enumvalue_customname) = "HyperchainTypeEnterprise"];
+  HYPERCHAIN_TYPE_CONSORTIUM = 5 [(gogoproto.enumvalue_customname) = "HyperchainTypeConsortium"];
+}
+
+// ConsensusType defines the consensus mechanism used by a hyperchain
+enum ConsensusType {
+  option (gogoproto.goproto_enum_prefix) = false;
+  
+  CONSENSUS_TYPE_UNSPECIFIED = 0 [(gogoproto.enumvalue_customname) = "ConsensusTypeUnspecified"];
+  CONSENSUS_TYPE_TENDERMINT = 1 [(gogoproto.enumvalue_customname) = "ConsensusTypeTendermint"];
+  CONSENSUS_TYPE_NEUROPOS = 2 [(gogoproto.enumvalue_customname) = "ConsensusTypeNeuroPOS"];
+  CONSENSUS_TYPE_POA = 3 [(gogoproto.enumvalue_customname) = "ConsensusTypePOA"];
+  CONSENSUS_TYPE_HYBRID = 4 [(gogoproto.enumvalue_customname) = "ConsensusTypeHybrid"];
+  CONSENSUS_TYPE_CUSTOM = 5 [(gogoproto.enumvalue_customname) = "ConsensusTypeCustom"];
+}
+
+// Hyperchain defines a Layer 3 hyperchain
+message Hyperchain {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  string creator = 4 [(gogoproto.moretags) = "yaml:\"creator\""];
+  string admin = 5 [(gogoproto.moretags) = "yaml:\"admin\""];
+  HyperchainType chain_type = 6 [(gogoproto.moretags) = "yaml:\"chain_type\""];
+  ConsensusType consensus_type = 7 [(gogoproto.moretags) = "yaml:\"consensus_type\""];
+  string status = 8;
+  uint64 block_height = 9 [(gogoproto.moretags) = "yaml:\"block_height\""];
+  string genesis_hash = 10 [(gogoproto.moretags) = "yaml:\"genesis_hash\""];
+  bytes genesis_config = 11;
+  bytes chain_config = 12;
+  bytes metadata = 13;
+  google.protobuf.Timestamp created_at = 14 [(gogoproto.stdtime) = true, (gogoproto.nullable) = false];
+  google.protobuf.Timestamp updated_at = 15 [(gogoproto.stdtime) = true, (gogoproto.nullable) = false];
+  repeated string validators = 16;
+  uint64 max_validators = 17 [(gogoproto.moretags) = "yaml:\"max_validators\""];
+  uint64 min_stake = 18 [(gogoproto.moretags) = "yaml:\"min_stake\""];
+  string parent_chain_id = 19 [(gogoproto.moretags) = "yaml:\"parent_chain_id\""];
+  repeated string child_chain_ids = 20 [(gogoproto.moretags) = "yaml:\"child_chain_ids\""];
+  repeated string supported_tokens = 21 [(gogoproto.moretags) = "yaml:\"supported_tokens\""];
+  repeated string supported_modules = 22 [(gogoproto.moretags) = "yaml:\"supported_modules\""];
+  string agent_id = 23 [(gogoproto.moretags) = "yaml:\"agent_id\""];
+}
+
+// HyperchainValidator defines a validator for a hyperchain
+message HyperchainValidator {
+  string chain_id = 1 [(gogoproto.moretags) = "yaml:\"chain_id\""];
+  string address = 2;
+  string pubkey = 3;
+  uint64 power = 4;
+  string status = 5;
+  cosmos.base.v1beta1.Coin stake = 6 [(gogoproto.nullable) = false];
+  google.protobuf.Timestamp joined_at = 7 [(gogoproto.stdtime) = true, (gogoproto.nullable) = false];
+  bytes metadata = 8;
+}
+
+// HyperchainBlock defines a block in a hyperchain
+message HyperchainBlock {
+  string chain_id = 1 [(gogoproto.moretags) = "yaml:\"chain_id\""];
+  uint64 height = 2;
+  string hash = 3;
+  string parent_hash = 4 [(gogoproto.moretags) = "yaml:\"parent_hash\""];
+  google.protobuf.Timestamp timestamp = 5 [(gogoproto.stdtime) = true, (gogoproto.nullable) = false];
+  uint64 num_txs = 6 [(gogoproto.moretags) = "yaml:\"num_txs\""];
+  string proposer = 7;
+  bytes data = 8;
+}
+
+// HyperchainTransaction defines a transaction in a hyperchain
+message HyperchainTransaction {
+  string id = 1;
+  string chain_id = 2 [(gogoproto.moretags) = "yaml:\"chain_id\""];
+  uint64 block_height = 3 [(gogoproto.moretags) = "yaml:\"block_height\""];
+  string sender = 4;
+  string recipient = 5;
+  cosmos.base.v1beta1.Coin amount = 6 [(gogoproto.nullable) = false];
+  string status = 7;
+  google.protobuf.Timestamp timestamp = 8 [(gogoproto.stdtime) = true, (gogoproto.nullable) = false];
+  bytes data = 9;
+  uint64 gas_used = 10 [(gogoproto.moretags) = "yaml:\"gas_used\""];
+  string error = 11;
+}
+
+// HyperchainBridge defines a bridge between hyperchains or between a hyperchain and the main chain
+message HyperchainBridge {
+  string id = 1;
+  string source_chain_id = 2 [(gogoproto.moretags) = "yaml:\"source_chain_id\""];
+  string target_chain_id = 3 [(gogoproto.moretags) = "yaml:\"target_chain_id\""];
+  string status = 4;
+  string creator = 5 [(gogoproto.moretags) = "yaml:\"creator\""];
+  string admin = 6 [(gogoproto.moretags) = "yaml:\"admin\""];
+  google.protobuf.Timestamp created_at = 7 [(gogoproto.stdtime) = true, (gogoproto.nullable) = false];
+  google.protobuf.Timestamp updated_at = 8 [(gogoproto.stdtime) = true, (gogoproto.nullable) = false];
+  repeated string relayers = 9;
+  uint64 min_relayers = 10 [(gogoproto.moretags) = "yaml:\"min_relayers\""];
+  repeated string supported_tokens = 11 [(gogoproto.moretags) = "yaml:\"supported_tokens\""];
+  bytes metadata = 12;
+}
+
+// HyperchainBridgeTransaction defines a transaction through a hyperchain bridge
+message HyperchainBridgeTransaction {
+  string id = 1;
+  string bridge_id = 2 [(gogoproto.moretags) = "yaml:\"bridge_id\""];
+  string source_chain_id = 3 [(gogoproto.moretags) = "yaml:\"source_chain_id\""];
+  string target_chain_id = 4 [(gogoproto.moretags) = "yaml:\"target_chain_id\""];
+  string sender = 5;
+  string recipient = 6;
+  cosmos.base.v1beta1.Coin amount = 7 [(gogoproto.nullable) = false];
+  string status = 8;
+  google.protobuf.Timestamp created_at = 9 [(gogoproto.stdtime) = true, (gogoproto.nullable) = false];
+  google.protobuf.Timestamp completed_at = 10 [(gogoproto.stdtime) = true, (gogoproto.nullable) = true];
+  string source_tx_id = 11 [(gogoproto.moretags) = "yaml:\"source_tx_id\""];
+  string target_tx_id = 12 [(gogoproto.moretags) = "yaml:\"target_tx_id\""];
+  repeated string approvals = 13;
+  bytes metadata = 14;
+}
+
+// HyperchainPermission defines a permission for a hyperchain
+message HyperchainPermission {
+  string chain_id = 1 [(gogoproto.moretags) = "yaml:\"chain_id\""];
+  string address = 2;
+  string permission_type = 3 [(gogoproto.moretags) = "yaml:\"permission_type\""];
+  google.protobuf.Timestamp granted_at = 4 [(gogoproto.stdtime) = true, (gogoproto.nullable) = false];
+  google.protobuf.Timestamp expires_at = 5 [(gogoproto.stdtime) = true, (gogoproto.nullable) = true];
+  string granted_by = 6 [(gogoproto.moretags) = "yaml:\"granted_by\""];
+  bytes metadata = 7;
+}
+
+// Params defines the parameters for the hyperchain module
+message Params {
+  option (gogoproto.goproto_stringer) = false;
+  
+  uint64 max_hyperchains_per_account = 1 [(gogoproto.moretags) = "yaml:\"max_hyperchains_per_account\""];
+  uint64 max_validators_per_hyperchain = 2 [(gogoproto.moretags) = "yaml:\"max_validators_per_hyperchain\""];
+  uint64 max_bridges_per_hyperchain = 3 [(gogoproto.moretags) = "yaml:\"max_bridges_per_hyperchain\""];
+  cosmos.base.v1beta1.Coin min_hyperchain_creation_deposit = 4 [(gogoproto.nullable) = false];
+  cosmos.base.v1beta1.Coin min_validator_stake = 5 [(gogoproto.nullable) = false];
+  string bridge_fee_rate = 6 [(gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec", (gogoproto.nullable) = false];
+}
+
+// GenesisState defines the hyperchain module's genesis state
+message GenesisState {
+  repeated Hyperchain hyperchains = 1 [(gogoproto.nullable) = false];
+  repeated HyperchainValidator validators = 2 [(gogoproto.nullable) = false];
+  repeated HyperchainBlock blocks = 3 [(gogoproto.nullable) = false];
+  repeated HyperchainTransaction transactions = 4 [(gogoproto.nullable) = false];
+  repeated HyperchainBridge bridges = 5 [(gogoproto.nullable) = false];
+  repeated HyperchainBridgeTransaction bridge_transactions = 6 [(gogoproto.nullable) = false];
+  repeated HyperchainPermission permissions = 7 [(gogoproto.nullable) = false];
+  Params params = 8 [(gogoproto.nullable) = false];
+}

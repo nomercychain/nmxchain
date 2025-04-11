@@ -1,0 +1,192 @@
+syntax = "proto3";
+package nomercychain.nmxchain.dynacontract;
+
+import "gogoproto/gogo.proto";
+import "google/api/annotations.proto";
+import "cosmos/base/query/v1beta1/pagination.proto";
+import "dynacontract/dynacontract.proto";
+
+option go_package = "github.com/nomercychain/nmxchain/x/dynacontract/types";
+
+// Query defines the gRPC querier service.
+service Query {
+  // DynaContract returns information about a specific dynamic contract
+  rpc DynaContract(QueryDynaContractRequest) returns (QueryDynaContractResponse) {
+    option (google.api.http).get = "/nomercychain/nmxchain/dynacontract/contracts/{id}";
+  }
+  
+  // DynaContracts returns all dynamic contracts
+  rpc DynaContracts(QueryDynaContractsRequest) returns (QueryDynaContractsResponse) {
+    option (google.api.http).get = "/nomercychain/nmxchain/dynacontract/contracts";
+  }
+  
+  // DynaContractExecutions returns executions for a specific dynamic contract
+  rpc DynaContractExecutions(QueryDynaContractExecutionsRequest) returns (QueryDynaContractExecutionsResponse) {
+    option (google.api.http).get = "/nomercychain/nmxchain/dynacontract/contracts/{contract_id}/executions";
+  }
+  
+  // DynaContractExecution returns a specific dynamic contract execution
+  rpc DynaContractExecution(QueryDynaContractExecutionRequest) returns (QueryDynaContractExecutionResponse) {
+    option (google.api.http).get = "/nomercychain/nmxchain/dynacontract/executions/{id}";
+  }
+  
+  // DynaContractTemplates returns all dynamic contract templates
+  rpc DynaContractTemplates(QueryDynaContractTemplatesRequest) returns (QueryDynaContractTemplatesResponse) {
+    option (google.api.http).get = "/nomercychain/nmxchain/dynacontract/templates";
+  }
+  
+  // DynaContractTemplate returns a specific dynamic contract template
+  rpc DynaContractTemplate(QueryDynaContractTemplateRequest) returns (QueryDynaContractTemplateResponse) {
+    option (google.api.http).get = "/nomercychain/nmxchain/dynacontract/templates/{id}";
+  }
+  
+  // DynaContractLearningData returns learning data for a specific dynamic contract
+  rpc DynaContractLearningData(QueryDynaContractLearningDataRequest) returns (QueryDynaContractLearningDataResponse) {
+    option (google.api.http).get = "/nomercychain/nmxchain/dynacontract/contracts/{contract_id}/learning";
+  }
+  
+  // DynaContractPermissions returns permissions for a specific dynamic contract
+  rpc DynaContractPermissions(QueryDynaContractPermissionsRequest) returns (QueryDynaContractPermissionsResponse) {
+    option (google.api.http).get = "/nomercychain/nmxchain/dynacontract/contracts/{contract_id}/permissions";
+  }
+  
+  // DynaContractsByOwner returns dynamic contracts owned by a specific address
+  rpc DynaContractsByOwner(QueryDynaContractsByOwnerRequest) returns (QueryDynaContractsByOwnerResponse) {
+    option (google.api.http).get = "/nomercychain/nmxchain/dynacontract/contracts/owner/{owner}";
+  }
+  
+  // DynaContractsByAgent returns dynamic contracts associated with a specific AI agent
+  rpc DynaContractsByAgent(QueryDynaContractsByAgentRequest) returns (QueryDynaContractsByAgentResponse) {
+    option (google.api.http).get = "/nomercychain/nmxchain/dynacontract/contracts/agent/{agent_id}";
+  }
+  
+  // DynaContractsByTags returns dynamic contracts with specific tags
+  rpc DynaContractsByTags(QueryDynaContractsByTagsRequest) returns (QueryDynaContractsByTagsResponse) {
+    option (google.api.http).get = "/nomercychain/nmxchain/dynacontract/contracts/tags";
+  }
+}
+
+// QueryDynaContractRequest is the request type for the Query/DynaContract RPC method
+message QueryDynaContractRequest {
+  string id = 1;
+}
+
+// QueryDynaContractResponse is the response type for the Query/DynaContract RPC method
+message QueryDynaContractResponse {
+  DynaContract contract = 1 [(gogoproto.nullable) = false];
+}
+
+// QueryDynaContractsRequest is the request type for the Query/DynaContracts RPC method
+message QueryDynaContractsRequest {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+// QueryDynaContractsResponse is the response type for the Query/DynaContracts RPC method
+message QueryDynaContractsResponse {
+  repeated DynaContract contracts = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+// QueryDynaContractExecutionsRequest is the request type for the Query/DynaContractExecutions RPC method
+message QueryDynaContractExecutionsRequest {
+  string contract_id = 1;
+  cosmos.base.query.v1beta1.PageRequest pagination = 2;
+}
+
+// QueryDynaContractExecutionsResponse is the response type for the Query/DynaContractExecutions RPC method
+message QueryDynaContractExecutionsResponse {
+  repeated DynaContractExecution executions = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+// QueryDynaContractExecutionRequest is the request type for the Query/DynaContractExecution RPC method
+message QueryDynaContractExecutionRequest {
+  string id = 1;
+}
+
+// QueryDynaContractExecutionResponse is the response type for the Query/DynaContractExecution RPC method
+message QueryDynaContractExecutionResponse {
+  DynaContractExecution execution = 1 [(gogoproto.nullable) = false];
+}
+
+// QueryDynaContractTemplatesRequest is the request type for the Query/DynaContractTemplates RPC method
+message QueryDynaContractTemplatesRequest {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+// QueryDynaContractTemplatesResponse is the response type for the Query/DynaContractTemplates RPC method
+message QueryDynaContractTemplatesResponse {
+  repeated DynaContractTemplate templates = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+// QueryDynaContractTemplateRequest is the request type for the Query/DynaContractTemplate RPC method
+message QueryDynaContractTemplateRequest {
+  string id = 1;
+}
+
+// QueryDynaContractTemplateResponse is the response type for the Query/DynaContractTemplate RPC method
+message QueryDynaContractTemplateResponse {
+  DynaContractTemplate template = 1 [(gogoproto.nullable) = false];
+}
+
+// QueryDynaContractLearningDataRequest is the request type for the Query/DynaContractLearningData RPC method
+message QueryDynaContractLearningDataRequest {
+  string contract_id = 1;
+  cosmos.base.query.v1beta1.PageRequest pagination = 2;
+}
+
+// QueryDynaContractLearningDataResponse is the response type for the Query/DynaContractLearningData RPC method
+message QueryDynaContractLearningDataResponse {
+  repeated DynaContractLearningData learning_data = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+// QueryDynaContractPermissionsRequest is the request type for the Query/DynaContractPermissions RPC method
+message QueryDynaContractPermissionsRequest {
+  string contract_id = 1;
+  cosmos.base.query.v1beta1.PageRequest pagination = 2;
+}
+
+// QueryDynaContractPermissionsResponse is the response type for the Query/DynaContractPermissions RPC method
+message QueryDynaContractPermissionsResponse {
+  repeated DynaContractPermission permissions = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+// QueryDynaContractsByOwnerRequest is the request type for the Query/DynaContractsByOwner RPC method
+message QueryDynaContractsByOwnerRequest {
+  string owner = 1;
+  cosmos.base.query.v1beta1.PageRequest pagination = 2;
+}
+
+// QueryDynaContractsByOwnerResponse is the response type for the Query/DynaContractsByOwner RPC method
+message QueryDynaContractsByOwnerResponse {
+  repeated DynaContract contracts = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+// QueryDynaContractsByAgentRequest is the request type for the Query/DynaContractsByAgent RPC method
+message QueryDynaContractsByAgentRequest {
+  string agent_id = 1;
+  cosmos.base.query.v1beta1.PageRequest pagination = 2;
+}
+
+// QueryDynaContractsByAgentResponse is the response type for the Query/DynaContractsByAgent RPC method
+message QueryDynaContractsByAgentResponse {
+  repeated DynaContract contracts = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+// QueryDynaContractsByTagsRequest is the request type for the Query/DynaContractsByTags RPC method
+message QueryDynaContractsByTagsRequest {
+  repeated string tags = 1;
+  bool match_all = 2;
+  cosmos.base.query.v1beta1.PageRequest pagination = 3;
+}
+
+// QueryDynaContractsByTagsResponse is the response type for the Query/DynaContractsByTags RPC method
+message QueryDynaContractsByTagsResponse {
+  repeated DynaContract contracts = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}

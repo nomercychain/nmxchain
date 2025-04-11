@@ -1,0 +1,124 @@
+syntax = "proto3";
+package nomercychain.nmxchain.deai;
+
+import "gogoproto/gogo.proto";
+import "google/api/annotations.proto";
+import "cosmos/base/query/v1beta1/pagination.proto";
+import "cosmos/base/v1beta1/coin.proto";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/any.proto";
+
+option go_package = "github.com/nomercychain/nmxchain/x/deai/types";
+
+// AIAgentType defines the type of AI agent
+enum AIAgentType {
+  option (gogoproto.goproto_enum_prefix) = false;
+  
+  AI_AGENT_TYPE_UNSPECIFIED = 0 [(gogoproto.enumvalue_customname) = "AIAgentTypeUnspecified"];
+  AI_AGENT_TYPE_GENERAL = 1 [(gogoproto.enumvalue_customname) = "AIAgentTypeGeneral"];
+  AI_AGENT_TYPE_TEXT = 2 [(gogoproto.enumvalue_customname) = "AIAgentTypeText"];
+  AI_AGENT_TYPE_IMAGE = 3 [(gogoproto.enumvalue_customname) = "AIAgentTypeImage"];
+  AI_AGENT_TYPE_AUDIO = 4 [(gogoproto.enumvalue_customname) = "AIAgentTypeAudio"];
+  AI_AGENT_TYPE_VIDEO = 5 [(gogoproto.enumvalue_customname) = "AIAgentTypeVideo"];
+  AI_AGENT_TYPE_MULTIMODAL = 6 [(gogoproto.enumvalue_customname) = "AIAgentTypeMultimodal"];
+  AI_AGENT_TYPE_SPECIALIZED = 7 [(gogoproto.enumvalue_customname) = "AIAgentTypeSpecialized"];
+}
+
+// AIAgent defines the structure for an AI agent
+message AIAgent {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  string owner = 4 [(gogoproto.moretags) = "yaml:\"owner\""];
+  string creator = 5 [(gogoproto.moretags) = "yaml:\"creator\""];
+  AIAgentType agent_type = 6 [(gogoproto.moretags) = "yaml:\"agent_type\""];
+  string status = 7;
+  string model_id = 8 [(gogoproto.moretags) = "yaml:\"model_id\""];
+  google.protobuf.Timestamp created_at = 9 [(gogoproto.stdtime) = true, (gogoproto.nullable) = false];
+  google.protobuf.Timestamp updated_at = 10 [(gogoproto.stdtime) = true, (gogoproto.nullable) = false];
+  bytes permissions = 11;
+  bytes metadata = 12;
+}
+
+// AIAgentState defines the state of an AI agent
+message AIAgentState {
+  string agent_id = 1 [(gogoproto.moretags) = "yaml:\"agent_id\""];
+  bytes state_data = 2;
+  string storage_type = 3 [(gogoproto.moretags) = "yaml:\"storage_type\""];
+  google.protobuf.Timestamp updated_at = 4 [(gogoproto.stdtime) = true, (gogoproto.nullable) = false];
+}
+
+// AIAgentAction defines an action performed by an AI agent
+message AIAgentAction {
+  string id = 1;
+  string agent_id = 2 [(gogoproto.moretags) = "yaml:\"agent_id\""];
+  string action_type = 3 [(gogoproto.moretags) = "yaml:\"action_type\""];
+  google.protobuf.Timestamp timestamp = 4 [(gogoproto.stdtime) = true, (gogoproto.nullable) = false];
+  bytes data = 5;
+  bytes result = 6;
+  string status = 7;
+  uint64 gas_used = 8 [(gogoproto.moretags) = "yaml:\"gas_used\""];
+}
+
+// AIAgentTrainingData defines training data for an AI agent
+message AIAgentTrainingData {
+  string id = 1;
+  string agent_id = 2 [(gogoproto.moretags) = "yaml:\"agent_id\""];
+  string data_type = 3 [(gogoproto.moretags) = "yaml:\"data_type\""];
+  bytes data = 4;
+  string source = 5;
+  google.protobuf.Timestamp timestamp = 6 [(gogoproto.stdtime) = true, (gogoproto.nullable) = false];
+  string storage_type = 7 [(gogoproto.moretags) = "yaml:\"storage_type\""];
+}
+
+// AIAgentModel defines an AI model that can be used by agents
+message AIAgentModel {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  string version = 4;
+  string creator = 5 [(gogoproto.moretags) = "yaml:\"creator\""];
+  string model_type = 6 [(gogoproto.moretags) = "yaml:\"model_type\""];
+  repeated string capabilities = 7;
+  bytes parameters = 8;
+  bytes metadata = 9;
+  google.protobuf.Timestamp created_at = 10 [(gogoproto.stdtime) = true, (gogoproto.nullable) = false];
+  google.protobuf.Timestamp updated_at = 11 [(gogoproto.stdtime) = true, (gogoproto.nullable) = false];
+}
+
+// AIAgentMarketplaceListing defines a marketplace listing for an AI agent
+message AIAgentMarketplaceListing {
+  string id = 1;
+  string agent_id = 2 [(gogoproto.moretags) = "yaml:\"agent_id\""];
+  string seller = 3 [(gogoproto.moretags) = "yaml:\"seller\""];
+  repeated cosmos.base.v1beta1.Coin price = 4 [(gogoproto.nullable) = false];
+  repeated cosmos.base.v1beta1.Coin rental_price = 5 [(gogoproto.nullable) = false];
+  uint64 rental_duration = 6 [(gogoproto.moretags) = "yaml:\"rental_duration\""];
+  string listing_type = 7 [(gogoproto.moretags) = "yaml:\"listing_type\""];
+  string status = 8;
+  google.protobuf.Timestamp created_at = 9 [(gogoproto.stdtime) = true, (gogoproto.nullable) = false];
+  google.protobuf.Timestamp expires_at = 10 [(gogoproto.stdtime) = true, (gogoproto.nullable) = false];
+}
+
+// Params defines the parameters for the deai module
+message Params {
+  option (gogoproto.goproto_stringer) = false;
+  
+  cosmos.base.v1beta1.Coin min_agent_deposit = 1 [(gogoproto.nullable) = false];
+  uint64 max_agent_name_length = 2 [(gogoproto.moretags) = "yaml:\"max_agent_name_length\""];
+  uint64 max_agent_desc_length = 3 [(gogoproto.moretags) = "yaml:\"max_agent_desc_length\""];
+  uint64 max_training_data_size = 4 [(gogoproto.moretags) = "yaml:\"max_training_data_size\""];
+  uint64 max_marketplace_listings = 5 [(gogoproto.moretags) = "yaml:\"max_marketplace_listings\""];
+  string marketplace_fee_rate = 6 [(gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec", (gogoproto.nullable) = false];
+}
+
+// GenesisState defines the deai module's genesis state
+message GenesisState {
+  repeated AIAgent agents = 1 [(gogoproto.nullable) = false];
+  repeated AIAgentModel models = 2 [(gogoproto.nullable) = false];
+  repeated AIAgentState states = 3 [(gogoproto.nullable) = false];
+  repeated AIAgentAction actions = 4 [(gogoproto.nullable) = false];
+  repeated AIAgentTrainingData training_data = 5 [(gogoproto.nullable) = false];
+  repeated AIAgentMarketplaceListing marketplace_listings = 6 [(gogoproto.nullable) = false];
+  Params params = 7 [(gogoproto.nullable) = false];
+}

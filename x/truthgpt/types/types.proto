@@ -1,0 +1,123 @@
+syntax = "proto3";
+package nomercychain.nmxchain.truthgpt;
+
+import "gogoproto/gogo.proto";
+import "google/protobuf/timestamp.proto";
+import "cosmos/base/v1beta1/coin.proto";
+
+option go_package = "github.com/nomercychain/nmxchain/x/truthgpt/types";
+
+// DataSource represents an external data source
+message DataSource {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  string source_type = 4;
+  string endpoint = 5;
+  string status = 6;
+  string owner = 7;
+  google.protobuf.Timestamp created_at = 8 [(gogoproto.stdtime) = true];
+  google.protobuf.Timestamp updated_at = 9 [(gogoproto.stdtime) = true];
+  string metadata = 10;
+}
+
+// DataSourceRank represents the ranking of a data source
+message DataSourceRank {
+  string source_id = 1;
+  string reliability = 2 [(gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec", (gogoproto.nullable) = false];
+  string accuracy = 3 [(gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec", (gogoproto.nullable) = false];
+  string timeliness = 4 [(gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec", (gogoproto.nullable) = false];
+  string completeness = 5 [(gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec", (gogoproto.nullable) = false];
+  string trust_score = 6 [(gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec", (gogoproto.nullable) = false];
+  google.protobuf.Timestamp last_evaluated = 7 [(gogoproto.stdtime) = true];
+  string evaluation_data = 8;
+}
+
+// OracleQuery represents a query to the oracle
+message OracleQuery {
+  string id = 1;
+  string requester = 2;
+  string query_type = 3;
+  string query = 4;
+  repeated string data_sources = 5;
+  string status = 6;
+  repeated cosmos.base.v1beta1.Coin fee = 7 [(gogoproto.nullable) = false];
+  google.protobuf.Timestamp created_at = 8 [(gogoproto.stdtime) = true];
+  google.protobuf.Timestamp completed_at = 9 [(gogoproto.stdtime) = true];
+  string response_id = 10;
+  string callback_data = 11;
+}
+
+// SourceResponse represents a response from a specific data source
+message SourceResponse {
+  string source_id = 1;
+  string response = 2;
+  google.protobuf.Timestamp timestamp = 3 [(gogoproto.stdtime) = true];
+  string status = 4;
+  string error = 5;
+}
+
+// OracleResponse represents a response from the oracle
+message OracleResponse {
+  string id = 1;
+  string query_id = 2;
+  string response = 3;
+  repeated SourceResponse source_responses = 4;
+  string confidence = 5 [(gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec", (gogoproto.nullable) = false];
+  string processed_by = 6;
+  google.protobuf.Timestamp created_at = 7 [(gogoproto.stdtime) = true];
+  string metadata = 8;
+}
+
+// AIModel represents an AI model used by the oracle
+message AIModel {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  string model_type = 4;
+  string model_url = 5;
+  string model_hash = 6;
+  uint64 version = 7;
+  google.protobuf.Timestamp created_at = 8 [(gogoproto.stdtime) = true];
+  google.protobuf.Timestamp updated_at = 9 [(gogoproto.stdtime) = true];
+  string metadata = 10;
+}
+
+// Misinformation represents detected misinformation
+message Misinformation {
+  string id = 1;
+  string content = 2;
+  string source = 3;
+  string detected_by = 4;
+  string reporter = 5;
+  string confidence = 6 [(gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec", (gogoproto.nullable) = false];
+  string evidence = 7;
+  google.protobuf.Timestamp created_at = 8 [(gogoproto.stdtime) = true];
+  string status = 9;
+  repeated string verified_by = 10;
+}
+
+// VerificationTask represents a task to verify information
+message VerificationTask {
+  string id = 1;
+  string content = 2;
+  string source = 3;
+  string creator = 4;
+  string status = 5;
+  uint64 priority = 6;
+  google.protobuf.Timestamp created_at = 7 [(gogoproto.stdtime) = true];
+  google.protobuf.Timestamp completed_at = 8 [(gogoproto.stdtime) = true];
+  string result = 9;
+}
+
+// GenesisState defines the truthgpt module's genesis state.
+message GenesisState {
+  Params params = 1 [(gogoproto.nullable) = false];
+  repeated DataSource data_sources = 2 [(gogoproto.nullable) = false];
+  repeated OracleQuery oracle_queries = 3 [(gogoproto.nullable) = false];
+  repeated OracleResponse oracle_responses = 4 [(gogoproto.nullable) = false];
+  repeated AIModel ai_models = 5 [(gogoproto.nullable) = false];
+  repeated DataSourceRank data_source_ranks = 6 [(gogoproto.nullable) = false];
+  repeated Misinformation misinformation_list = 7 [(gogoproto.nullable) = false];
+  repeated VerificationTask verification_tasks = 8 [(gogoproto.nullable) = false];
+}

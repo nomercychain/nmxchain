@@ -1,0 +1,68 @@
+syntax = "proto3";
+package nomercychain.nmxchain.truthgpt;
+
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/nomercychain/nmxchain/x/truthgpt/types";
+
+// Params defines the parameters for the truthgpt module.
+message Params {
+  option (gogoproto.goproto_stringer) = false;
+  
+  // min_data_sources is the minimum number of data sources required for a query
+  uint32 min_data_sources = 1;
+  
+  // max_data_sources is the maximum number of data sources allowed for a query
+  uint32 max_data_sources = 2;
+  
+  // min_oracle_fee is the minimum fee required for an oracle query
+  string min_oracle_fee = 3;
+  
+  // base_oracle_fee is the base fee for an oracle query
+  string base_oracle_fee = 4;
+  
+  // per_source_fee is the additional fee per data source
+  string per_source_fee = 5;
+  
+  // data_source_timeout is the timeout for a data source response in seconds
+  uint64 data_source_timeout = 6;
+  
+  // oracle_query_timeout is the timeout for an oracle query in seconds
+  uint64 oracle_query_timeout = 7;
+  
+  // min_data_source_rank is the minimum rank required for a data source to be used
+  string min_data_source_rank = 8 [(gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec", (gogoproto.nullable) = false];
+  
+  // max_query_data_size is the maximum size of query data in bytes
+  uint64 max_query_data_size = 9;
+  
+  // max_response_data_size is the maximum size of response data in bytes
+  uint64 max_response_data_size = 10;
+  
+  // min_confidence_threshold is the minimum confidence threshold for a response to be accepted
+  string min_confidence_threshold = 11 [(gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec", (gogoproto.nullable) = false];
+  
+  // max_verification_tasks_per_block is the maximum number of verification tasks that can be created in a block
+  uint32 max_verification_tasks_per_block = 12;
+  
+  // verification_reward is the reward for completing a verification task
+  string verification_reward = 13;
+  
+  // misinformation_report_threshold is the threshold for a misinformation report to be accepted
+  string misinformation_report_threshold = 14 [(gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec", (gogoproto.nullable) = false];
+  
+  // misinformation_report_reward is the reward for reporting misinformation that is accepted
+  string misinformation_report_reward = 15;
+  
+  // max_ai_model_size is the maximum size of an AI model in bytes
+  uint64 max_ai_model_size = 16;
+  
+  // ai_model_verification_required determines if AI models require verification before use
+  bool ai_model_verification_required = 17;
+  
+  // data_source_registration_fee is the fee required to register a data source
+  string data_source_registration_fee = 18;
+  
+  // ai_model_registration_fee is the fee required to register an AI model
+  string ai_model_registration_fee = 19;
+}

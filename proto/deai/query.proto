@@ -1,0 +1,172 @@
+syntax = "proto3";
+package nomercychain.nmxchain.deai;
+
+import "gogoproto/gogo.proto";
+import "google/api/annotations.proto";
+import "cosmos/base/query/v1beta1/pagination.proto";
+import "deai/deai.proto";
+
+option go_package = "github.com/nomercychain/nmxchain/x/deai/types";
+
+// Query defines the gRPC querier service.
+service Query {
+  // AIAgent returns information about a specific AI agent
+  rpc AIAgent(QueryAIAgentRequest) returns (QueryAIAgentResponse) {
+    option (google.api.http).get = "/nomercychain/nmxchain/deai/agents/{id}";
+  }
+  
+  // AIAgents returns all AI agents
+  rpc AIAgents(QueryAIAgentsRequest) returns (QueryAIAgentsResponse) {
+    option (google.api.http).get = "/nomercychain/nmxchain/deai/agents";
+  }
+  
+  // AIAgentState returns the state of a specific AI agent
+  rpc AIAgentState(QueryAIAgentStateRequest) returns (QueryAIAgentStateResponse) {
+    option (google.api.http).get = "/nomercychain/nmxchain/deai/agents/{agent_id}/state";
+  }
+  
+  // AIAgentActions returns actions for a specific AI agent
+  rpc AIAgentActions(QueryAIAgentActionsRequest) returns (QueryAIAgentActionsResponse) {
+    option (google.api.http).get = "/nomercychain/nmxchain/deai/agents/{agent_id}/actions";
+  }
+  
+  // AIAgentAction returns a specific AI agent action
+  rpc AIAgentAction(QueryAIAgentActionRequest) returns (QueryAIAgentActionResponse) {
+    option (google.api.http).get = "/nomercychain/nmxchain/deai/actions/{id}";
+  }
+  
+  // AIAgentModels returns all AI agent models
+  rpc AIAgentModels(QueryAIAgentModelsRequest) returns (QueryAIAgentModelsResponse) {
+    option (google.api.http).get = "/nomercychain/nmxchain/deai/models";
+  }
+  
+  // AIAgentModel returns a specific AI agent model
+  rpc AIAgentModel(QueryAIAgentModelRequest) returns (QueryAIAgentModelResponse) {
+    option (google.api.http).get = "/nomercychain/nmxchain/deai/models/{id}";
+  }
+  
+  // AIAgentTrainingData returns training data for a specific AI agent
+  rpc AIAgentTrainingData(QueryAIAgentTrainingDataRequest) returns (QueryAIAgentTrainingDataResponse) {
+    option (google.api.http).get = "/nomercychain/nmxchain/deai/agents/{agent_id}/training";
+  }
+  
+  // MarketplaceListings returns all marketplace listings
+  rpc MarketplaceListings(QueryMarketplaceListingsRequest) returns (QueryMarketplaceListingsResponse) {
+    option (google.api.http).get = "/nomercychain/nmxchain/deai/marketplace";
+  }
+  
+  // MarketplaceListing returns a specific marketplace listing
+  rpc MarketplaceListing(QueryMarketplaceListingRequest) returns (QueryMarketplaceListingResponse) {
+    option (google.api.http).get = "/nomercychain/nmxchain/deai/marketplace/{id}";
+  }
+}
+
+// QueryAIAgentRequest is the request type for the Query/AIAgent RPC method
+message QueryAIAgentRequest {
+  string id = 1;
+}
+
+// QueryAIAgentResponse is the response type for the Query/AIAgent RPC method
+message QueryAIAgentResponse {
+  AIAgent agent = 1 [(gogoproto.nullable) = false];
+}
+
+// QueryAIAgentsRequest is the request type for the Query/AIAgents RPC method
+message QueryAIAgentsRequest {
+  string owner = 1;
+  cosmos.base.query.v1beta1.PageRequest pagination = 2;
+}
+
+// QueryAIAgentsResponse is the response type for the Query/AIAgents RPC method
+message QueryAIAgentsResponse {
+  repeated AIAgent agents = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+// QueryAIAgentStateRequest is the request type for the Query/AIAgentState RPC method
+message QueryAIAgentStateRequest {
+  string agent_id = 1;
+}
+
+// QueryAIAgentStateResponse is the response type for the Query/AIAgentState RPC method
+message QueryAIAgentStateResponse {
+  AIAgentState state = 1 [(gogoproto.nullable) = false];
+}
+
+// QueryAIAgentActionsRequest is the request type for the Query/AIAgentActions RPC method
+message QueryAIAgentActionsRequest {
+  string agent_id = 1;
+  cosmos.base.query.v1beta1.PageRequest pagination = 2;
+}
+
+// QueryAIAgentActionsResponse is the response type for the Query/AIAgentActions RPC method
+message QueryAIAgentActionsResponse {
+  repeated AIAgentAction actions = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+// QueryAIAgentActionRequest is the request type for the Query/AIAgentAction RPC method
+message QueryAIAgentActionRequest {
+  string id = 1;
+}
+
+// QueryAIAgentActionResponse is the response type for the Query/AIAgentAction RPC method
+message QueryAIAgentActionResponse {
+  AIAgentAction action = 1 [(gogoproto.nullable) = false];
+}
+
+// QueryAIAgentModelsRequest is the request type for the Query/AIAgentModels RPC method
+message QueryAIAgentModelsRequest {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+// QueryAIAgentModelsResponse is the response type for the Query/AIAgentModels RPC method
+message QueryAIAgentModelsResponse {
+  repeated AIAgentModel models = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+// QueryAIAgentModelRequest is the request type for the Query/AIAgentModel RPC method
+message QueryAIAgentModelRequest {
+  string id = 1;
+}
+
+// QueryAIAgentModelResponse is the response type for the Query/AIAgentModel RPC method
+message QueryAIAgentModelResponse {
+  AIAgentModel model = 1 [(gogoproto.nullable) = false];
+}
+
+// QueryAIAgentTrainingDataRequest is the request type for the Query/AIAgentTrainingData RPC method
+message QueryAIAgentTrainingDataRequest {
+  string agent_id = 1;
+  cosmos.base.query.v1beta1.PageRequest pagination = 2;
+}
+
+// QueryAIAgentTrainingDataResponse is the response type for the Query/AIAgentTrainingData RPC method
+message QueryAIAgentTrainingDataResponse {
+  repeated AIAgentTrainingData training_data = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+// QueryMarketplaceListingsRequest is the request type for the Query/MarketplaceListings RPC method
+message QueryMarketplaceListingsRequest {
+  string status = 1;
+  string listing_type = 2;
+  cosmos.base.query.v1beta1.PageRequest pagination = 3;
+}
+
+// QueryMarketplaceListingsResponse is the response type for the Query/MarketplaceListings RPC method
+message QueryMarketplaceListingsResponse {
+  repeated AIAgentMarketplaceListing listings = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+// QueryMarketplaceListingRequest is the request type for the Query/MarketplaceListing RPC method
+message QueryMarketplaceListingRequest {
+  string id = 1;
+}
+
+// QueryMarketplaceListingResponse is the response type for the Query/MarketplaceListing RPC method
+message QueryMarketplaceListingResponse {
+  AIAgentMarketplaceListing listing = 1 [(gogoproto.nullable) = false];
+}

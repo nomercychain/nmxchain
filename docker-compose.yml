@@ -1,0 +1,50 @@
+version: '3'
+
+services:
+  nmxchain-node:
+    build:
+      context: .
+      dockerfile: Dockerfile.node
+    container_name: nmxchain-node
+    ports:
+      - "26656:26656"
+      - "26657:26657"
+      - "1317:1317"
+    volumes:
+      - nmxchain-data:/root/.nmxchain
+    restart: unless-stopped
+    command: >
+      sh -c "
+        if [ ! -d /root/.nmxchain/config ]; then
+          nmxchaind init node --chain-id nomercychain-testnet-1 &&
+          nmxchaind keys add validator --keyring-backend test &&
+          VALIDATOR_ADDRESS=$$(nmxchaind keys show validator -a --keyring-backend test) &&
+          nmxchaind add-genesis-account $$VALIDATOR_ADDRESS 10000000000unmx --keyring-backend test &&
+          nmxchaind gentx validator 1000000000unmx --chain-id nomercychain-testnet-1 --keyring-backend test &&
+          nmxchaind collect-gentxs
+        fi &&
+        nmxchaind start --api.enable true --api.address tcp://0.0.0.0:1317 --rpc.laddr tcp://0.0.0.0:26657
+      "
+
+  nmxchain-frontend:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: nmxchain-frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - nmxchain-node
+    restart: unless-stopped
+    environment:
+      - REACT_APP_CHAIN_ID=nomercychain-testnet-1
+      - REACT_APP_CHAIN_NAME=NoMercyChain Testnet
+      - REACT_APP_RPC_ENDPOINT=http://localhost:26657
+      - REACT_APP_API_URL=http://localhost:1317
+      - REACT_APP_DENOM=unmx
+      - REACT_APP_DENOM_NAME=NMX
+      - REACT_APP_DECIMAL_PLACES=6
+      - REACT_APP_GAS_PRICE=0.025unmx
+
+volumes:
+  nmxchain-data:

@@ -1,0 +1,187 @@
+syntax = "proto3";
+package nomercychain.nmxchain.truthgpt;
+
+import "gogoproto/gogo.proto";
+import "cosmos/base/v1beta1/coin.proto";
+
+option go_package = "github.com/nomercychain/nmxchain/x/truthgpt/types";
+
+// Msg defines the Msg service.
+service Msg {
+  // RegisterDataSource registers a new data source
+  rpc RegisterDataSource(MsgRegisterDataSource) returns (MsgRegisterDataSourceResponse);
+  
+  // UpdateDataSource updates an existing data source
+  rpc UpdateDataSource(MsgUpdateDataSource) returns (MsgUpdateDataSourceResponse);
+  
+  // RemoveDataSource removes a data source
+  rpc RemoveDataSource(MsgRemoveDataSource) returns (MsgRemoveDataSourceResponse);
+  
+  // CreateOracleQuery creates a new oracle query
+  rpc CreateOracleQuery(MsgCreateOracleQuery) returns (MsgCreateOracleQueryResponse);
+  
+  // SubmitOracleResponse submits a response to an oracle query
+  rpc SubmitOracleResponse(MsgSubmitOracleResponse) returns (MsgSubmitOracleResponseResponse);
+  
+  // RegisterAIModel registers a new AI model
+  rpc RegisterAIModel(MsgRegisterAIModel) returns (MsgRegisterAIModelResponse);
+  
+  // UpdateAIModel updates an existing AI model
+  rpc UpdateAIModel(MsgUpdateAIModel) returns (MsgUpdateAIModelResponse);
+  
+  // RemoveAIModel removes an AI model
+  rpc RemoveAIModel(MsgRemoveAIModel) returns (MsgRemoveAIModelResponse);
+  
+  // ReportMisinformation reports misinformation
+  rpc ReportMisinformation(MsgReportMisinformation) returns (MsgReportMisinformationResponse);
+  
+  // CreateVerificationTask creates a verification task
+  rpc CreateVerificationTask(MsgCreateVerificationTask) returns (MsgCreateVerificationTaskResponse);
+  
+  // CompleteVerificationTask completes a verification task
+  rpc CompleteVerificationTask(MsgCompleteVerificationTask) returns (MsgCompleteVerificationTaskResponse);
+}
+
+// MsgRegisterDataSource defines a message to register a new data source
+message MsgRegisterDataSource {
+  string name = 1;
+  string description = 2;
+  string source_type = 3;
+  string endpoint = 4;
+  string metadata = 5;
+  string owner = 6;
+}
+
+// MsgRegisterDataSourceResponse defines the response to a MsgRegisterDataSource message
+message MsgRegisterDataSourceResponse {
+  string id = 1;
+}
+
+// MsgUpdateDataSource defines a message to update an existing data source
+message MsgUpdateDataSource {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  string source_type = 4;
+  string endpoint = 5;
+  string metadata = 6;
+  string owner = 7;
+}
+
+// MsgUpdateDataSourceResponse defines the response to a MsgUpdateDataSource message
+message MsgUpdateDataSourceResponse {}
+
+// MsgRemoveDataSource defines a message to remove a data source
+message MsgRemoveDataSource {
+  string id = 1;
+  string owner = 2;
+}
+
+// MsgRemoveDataSourceResponse defines the response to a MsgRemoveDataSource message
+message MsgRemoveDataSourceResponse {}
+
+// MsgCreateOracleQuery defines a message to create a new oracle query
+message MsgCreateOracleQuery {
+  string requester = 1;
+  string query_type = 2;
+  string query = 3;
+  repeated string data_sources = 4;
+  repeated cosmos.base.v1beta1.Coin fee = 5 [(gogoproto.nullable) = false];
+  string callback_data = 6;
+}
+
+// MsgCreateOracleQueryResponse defines the response to a MsgCreateOracleQuery message
+message MsgCreateOracleQueryResponse {
+  string id = 1;
+}
+
+// MsgSubmitOracleResponse defines a message to submit a response to an oracle query
+message MsgSubmitOracleResponse {
+  string query_id = 1;
+  string response = 2;
+  string confidence = 3;
+  string responder = 4;
+  string source_id = 5;
+}
+
+// MsgSubmitOracleResponseResponse defines the response to a MsgSubmitOracleResponse message
+message MsgSubmitOracleResponseResponse {
+  string id = 1;
+}
+
+// MsgRegisterAIModel defines a message to register a new AI model
+message MsgRegisterAIModel {
+  string name = 1;
+  string description = 2;
+  string model_type = 3;
+  string model_url = 4;
+  string model_hash = 5;
+  string metadata = 6;
+  string owner = 7;
+}
+
+// MsgRegisterAIModelResponse defines the response to a MsgRegisterAIModel message
+message MsgRegisterAIModelResponse {
+  string id = 1;
+}
+
+// MsgUpdateAIModel defines a message to update an existing AI model
+message MsgUpdateAIModel {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  string model_type = 4;
+  string model_url = 5;
+  string model_hash = 6;
+  string metadata = 7;
+  string owner = 8;
+}
+
+// MsgUpdateAIModelResponse defines the response to a MsgUpdateAIModel message
+message MsgUpdateAIModelResponse {}
+
+// MsgRemoveAIModel defines a message to remove an AI model
+message MsgRemoveAIModel {
+  string id = 1;
+  string owner = 2;
+}
+
+// MsgRemoveAIModelResponse defines the response to a MsgRemoveAIModel message
+message MsgRemoveAIModelResponse {}
+
+// MsgReportMisinformation defines a message to report misinformation
+message MsgReportMisinformation {
+  string content = 1;
+  string source = 2;
+  string evidence = 3;
+  string confidence = 4;
+  string reporter = 5;
+}
+
+// MsgReportMisinformationResponse defines the response to a MsgReportMisinformation message
+message MsgReportMisinformationResponse {
+  string id = 1;
+}
+
+// MsgCreateVerificationTask defines a message to create a verification task
+message MsgCreateVerificationTask {
+  string content = 1;
+  string source = 2;
+  uint64 priority = 3;
+  string creator = 4;
+}
+
+// MsgCreateVerificationTaskResponse defines the response to a MsgCreateVerificationTask message
+message MsgCreateVerificationTaskResponse {
+  string id = 1;
+}
+
+// MsgCompleteVerificationTask defines a message to complete a verification task
+message MsgCompleteVerificationTask {
+  string task_id = 1;
+  string result = 2;
+  string verifier = 3;
+}
+
+// MsgCompleteVerificationTaskResponse defines the response to a MsgCompleteVerificationTask message
+message MsgCompleteVerificationTaskResponse {}

@@ -1,0 +1,40 @@
+﻿# Binaries and build artifacts
+/build/
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Dependency directories
+/vendor/
+/node_modules/
+
+# Go specific
+*.o
+*.a
+*.test
+*.out
+*.prof
+/go.sum
+
+# IDE specific files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS specific files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.bak
+*.log
+node_modules/
+.env
+# Ignore all node_modules folders recursively
+**/node_modules/
+
+# Ignore all .env files recursively
+**/.env

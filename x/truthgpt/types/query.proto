@@ -1,0 +1,277 @@
+syntax = "proto3";
+package nomercychain.nmxchain.truthgpt;
+
+import "gogoproto/gogo.proto";
+import "google/api/annotations.proto";
+import "cosmos/base/query/v1beta1/pagination.proto";
+import "truthgpt/types/params.proto";
+import "truthgpt/types/types.proto";
+
+option go_package = "github.com/nomercychain/nmxchain/x/truthgpt/types";
+
+// Query defines the gRPC querier service.
+service Query {
+  // Parameters queries the parameters of the module.
+  rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
+    option (google.api.http).get = "/nomercychain/nmxchain/truthgpt/params";
+  }
+
+  // DataSource queries a data source by ID.
+  rpc DataSource(QueryDataSourceRequest) returns (QueryDataSourceResponse) {
+    option (google.api.http).get = "/nomercychain/nmxchain/truthgpt/data_sources/{id}";
+  }
+
+  // DataSources queries all data sources with pagination.
+  rpc DataSources(QueryDataSourcesRequest) returns (QueryDataSourcesResponse) {
+    option (google.api.http).get = "/nomercychain/nmxchain/truthgpt/data_sources";
+  }
+
+  // DataSourceRank queries a data source rank by source ID.
+  rpc DataSourceRank(QueryDataSourceRankRequest) returns (QueryDataSourceRankResponse) {
+    option (google.api.http).get = "/nomercychain/nmxchain/truthgpt/data_source_ranks/{source_id}";
+  }
+
+  // DataSourceRanks queries all data source ranks with pagination.
+  rpc DataSourceRanks(QueryDataSourceRanksRequest) returns (QueryDataSourceRanksResponse) {
+    option (google.api.http).get = "/nomercychain/nmxchain/truthgpt/data_source_ranks";
+  }
+
+  // OracleQuery queries an oracle query by ID.
+  rpc OracleQuery(QueryOracleQueryRequest) returns (QueryOracleQueryResponse) {
+    option (google.api.http).get = "/nomercychain/nmxchain/truthgpt/oracle_queries/{id}";
+  }
+
+  // OracleQueries queries all oracle queries with pagination.
+  rpc OracleQueries(QueryOracleQueriesRequest) returns (QueryOracleQueriesResponse) {
+    option (google.api.http).get = "/nomercychain/nmxchain/truthgpt/oracle_queries";
+  }
+
+  // OracleResponse queries an oracle response by ID.
+  rpc OracleResponse(QueryOracleResponseRequest) returns (QueryOracleResponseResponse) {
+    option (google.api.http).get = "/nomercychain/nmxchain/truthgpt/oracle_responses/{id}";
+  }
+
+  // OracleResponses queries all oracle responses with pagination.
+  rpc OracleResponses(QueryOracleResponsesRequest) returns (QueryOracleResponsesResponse) {
+    option (google.api.http).get = "/nomercychain/nmxchain/truthgpt/oracle_responses";
+  }
+
+  // QueryResponses queries all responses for a specific query with pagination.
+  rpc QueryResponses(QueryQueryResponsesRequest) returns (QueryQueryResponsesResponse) {
+    option (google.api.http).get = "/nomercychain/nmxchain/truthgpt/query_responses/{query_id}";
+  }
+
+  // AIModel queries an AI model by ID.
+  rpc AIModel(QueryAIModelRequest) returns (QueryAIModelResponse) {
+    option (google.api.http).get = "/nomercychain/nmxchain/truthgpt/ai_models/{id}";
+  }
+
+  // AIModels queries all AI models with pagination.
+  rpc AIModels(QueryAIModelsRequest) returns (QueryAIModelsResponse) {
+    option (google.api.http).get = "/nomercychain/nmxchain/truthgpt/ai_models";
+  }
+
+  // Misinformation queries misinformation by ID.
+  rpc Misinformation(QueryMisinformationRequest) returns (QueryMisinformationResponse) {
+    option (google.api.http).get = "/nomercychain/nmxchain/truthgpt/misinformation/{id}";
+  }
+
+  // MisinformationList queries all misinformation with pagination.
+  rpc MisinformationList(QueryMisinformationListRequest) returns (QueryMisinformationListResponse) {
+    option (google.api.http).get = "/nomercychain/nmxchain/truthgpt/misinformation";
+  }
+
+  // VerificationTask queries a verification task by ID.
+  rpc VerificationTask(QueryVerificationTaskRequest) returns (QueryVerificationTaskResponse) {
+    option (google.api.http).get = "/nomercychain/nmxchain/truthgpt/verification_tasks/{id}";
+  }
+
+  // VerificationTasks queries all verification tasks with pagination.
+  rpc VerificationTasks(QueryVerificationTasksRequest) returns (QueryVerificationTasksResponse) {
+    option (google.api.http).get = "/nomercychain/nmxchain/truthgpt/verification_tasks";
+  }
+
+  // PendingVerificationTasks queries all pending verification tasks with pagination.
+  rpc PendingVerificationTasks(QueryPendingVerificationTasksRequest) returns (QueryPendingVerificationTasksResponse) {
+    option (google.api.http).get = "/nomercychain/nmxchain/truthgpt/pending_verification_tasks";
+  }
+}
+
+// QueryParamsRequest is request type for the Query/Params RPC method.
+message QueryParamsRequest {}
+
+// QueryParamsResponse is response type for the Query/Params RPC method.
+message QueryParamsResponse {
+  // params holds all the parameters of this module.
+  Params params = 1 [(gogoproto.nullable) = false];
+}
+
+// QueryDataSourceRequest is request type for the Query/DataSource RPC method.
+message QueryDataSourceRequest {
+  string id = 1;
+}
+
+// QueryDataSourceResponse is response type for the Query/DataSource RPC method.
+message QueryDataSourceResponse {
+  DataSource data_source = 1 [(gogoproto.nullable) = false];
+}
+
+// QueryDataSourcesRequest is request type for the Query/DataSources RPC method.
+message QueryDataSourcesRequest {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+// QueryDataSourcesResponse is response type for the Query/DataSources RPC method.
+message QueryDataSourcesResponse {
+  repeated DataSource data_sources = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+// QueryDataSourceRankRequest is request type for the Query/DataSourceRank RPC method.
+message QueryDataSourceRankRequest {
+  string source_id = 1;
+}
+
+// QueryDataSourceRankResponse is response type for the Query/DataSourceRank RPC method.
+message QueryDataSourceRankResponse {
+  DataSourceRank data_source_rank = 1 [(gogoproto.nullable) = false];
+}
+
+// QueryDataSourceRanksRequest is request type for the Query/DataSourceRanks RPC method.
+message QueryDataSourceRanksRequest {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+// QueryDataSourceRanksResponse is response type for the Query/DataSourceRanks RPC method.
+message QueryDataSourceRanksResponse {
+  repeated DataSourceRank data_source_ranks = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+// QueryOracleQueryRequest is request type for the Query/OracleQuery RPC method.
+message QueryOracleQueryRequest {
+  string id = 1;
+}
+
+// QueryOracleQueryResponse is response type for the Query/OracleQuery RPC method.
+message QueryOracleQueryResponse {
+  OracleQuery oracle_query = 1 [(gogoproto.nullable) = false];
+}
+
+// QueryOracleQueriesRequest is request type for the Query/OracleQueries RPC method.
+message QueryOracleQueriesRequest {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+// QueryOracleQueriesResponse is response type for the Query/OracleQueries RPC method.
+message QueryOracleQueriesResponse {
+  repeated OracleQuery oracle_queries = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+// QueryOracleResponseRequest is request type for the Query/OracleResponse RPC method.
+message QueryOracleResponseRequest {
+  string id = 1;
+}
+
+// QueryOracleResponseResponse is response type for the Query/OracleResponse RPC method.
+message QueryOracleResponseResponse {
+  OracleResponse oracle_response = 1 [(gogoproto.nullable) = false];
+}
+
+// QueryOracleResponsesRequest is request type for the Query/OracleResponses RPC method.
+message QueryOracleResponsesRequest {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+// QueryOracleResponsesResponse is response type for the Query/OracleResponses RPC method.
+message QueryOracleResponsesResponse {
+  repeated OracleResponse oracle_responses = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+// QueryQueryResponsesRequest is request type for the Query/QueryResponses RPC method.
+message QueryQueryResponsesRequest {
+  string query_id = 1;
+  cosmos.base.query.v1beta1.PageRequest pagination = 2;
+}
+
+// QueryQueryResponsesResponse is response type for the Query/QueryResponses RPC method.
+message QueryQueryResponsesResponse {
+  repeated OracleResponse oracle_responses = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+// QueryAIModelRequest is request type for the Query/AIModel RPC method.
+message QueryAIModelRequest {
+  string id = 1;
+}
+
+// QueryAIModelResponse is response type for the Query/AIModel RPC method.
+message QueryAIModelResponse {
+  AIModel ai_model = 1 [(gogoproto.nullable) = false];
+}
+
+// QueryAIModelsRequest is request type for the Query/AIModels RPC method.
+message QueryAIModelsRequest {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+// QueryAIModelsResponse is response type for the Query/AIModels RPC method.
+message QueryAIModelsResponse {
+  repeated AIModel ai_models = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+// QueryMisinformationRequest is request type for the Query/Misinformation RPC method.
+message QueryMisinformationRequest {
+  string id = 1;
+}
+
+// QueryMisinformationResponse is response type for the Query/Misinformation RPC method.
+message QueryMisinformationResponse {
+  Misinformation misinformation = 1 [(gogoproto.nullable) = false];
+}
+
+// QueryMisinformationListRequest is request type for the Query/MisinformationList RPC method.
+message QueryMisinformationListRequest {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+// QueryMisinformationListResponse is response type for the Query/MisinformationList RPC method.
+message QueryMisinformationListResponse {
+  repeated Misinformation misinformation_list = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+// QueryVerificationTaskRequest is request type for the Query/VerificationTask RPC method.
+message QueryVerificationTaskRequest {
+  string id = 1;
+}
+
+// QueryVerificationTaskResponse is response type for the Query/VerificationTask RPC method.
+message QueryVerificationTaskResponse {
+  VerificationTask verification_task = 1 [(gogoproto.nullable) = false];
+}
+
+// QueryVerificationTasksRequest is request type for the Query/VerificationTasks RPC method.
+message QueryVerificationTasksRequest {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+// QueryVerificationTasksResponse is response type for the Query/VerificationTasks RPC method.
+message QueryVerificationTasksResponse {
+  repeated VerificationTask verification_tasks = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+// QueryPendingVerificationTasksRequest is request type for the Query/PendingVerificationTasks RPC method.
+message QueryPendingVerificationTasksRequest {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+// QueryPendingVerificationTasksResponse is response type for the Query/PendingVerificationTasks RPC method.
+message QueryPendingVerificationTasksResponse {
+  repeated VerificationTask verification_tasks = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}

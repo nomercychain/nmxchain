@@ -1,0 +1,289 @@
+syntax = "proto3";
+package nomercychain.nmxchain.hyperchain;
+
+import "gogoproto/gogo.proto";
+import "google/api/annotations.proto";
+import "cosmos/base/query/v1beta1/pagination.proto";
+import "hyperchain/hyperchain.proto";
+
+option go_package = "github.com/nomercychain/nmxchain/x/hyperchain/types";
+
+// Query defines the gRPC querier service.
+service Query {
+  // Hyperchain returns information about a specific hyperchain
+  rpc Hyperchain(QueryHyperchainRequest) returns (QueryHyperchainResponse) {
+    option (google.api.http).get = "/nomercychain/nmxchain/hyperchain/chains/{id}";
+  }
+  
+  // Hyperchains returns all hyperchains
+  rpc Hyperchains(QueryHyperchainsRequest) returns (QueryHyperchainsResponse) {
+    option (google.api.http).get = "/nomercychain/nmxchain/hyperchain/chains";
+  }
+  
+  // HyperchainsByCreator returns hyperchains created by a specific address
+  rpc HyperchainsByCreator(QueryHyperchainsByCreatorRequest) returns (QueryHyperchainsByCreatorResponse) {
+    option (google.api.http).get = "/nomercychain/nmxchain/hyperchain/chains/creator/{creator}";
+  }
+  
+  // HyperchainsByParent returns hyperchains with a specific parent chain
+  rpc HyperchainsByParent(QueryHyperchainsByParentRequest) returns (QueryHyperchainsByParentResponse) {
+    option (google.api.http).get = "/nomercychain/nmxchain/hyperchain/chains/parent/{parent_chain_id}";
+  }
+  
+  // HyperchainValidator returns information about a specific validator in a hyperchain
+  rpc HyperchainValidator(QueryHyperchainValidatorRequest) returns (QueryHyperchainValidatorResponse) {
+    option (google.api.http).get = "/nomercychain/nmxchain/hyperchain/chains/{chain_id}/validators/{address}";
+  }
+  
+  // HyperchainValidators returns all validators in a hyperchain
+  rpc HyperchainValidators(QueryHyperchainValidatorsRequest) returns (QueryHyperchainValidatorsResponse) {
+    option (google.api.http).get = "/nomercychain/nmxchain/hyperchain/chains/{chain_id}/validators";
+  }
+  
+  // HyperchainBlock returns a specific block in a hyperchain
+  rpc HyperchainBlock(QueryHyperchainBlockRequest) returns (QueryHyperchainBlockResponse) {
+    option (google.api.http).get = "/nomercychain/nmxchain/hyperchain/chains/{chain_id}/blocks/{height}";
+  }
+  
+  // HyperchainBlocks returns blocks in a hyperchain
+  rpc HyperchainBlocks(QueryHyperchainBlocksRequest) returns (QueryHyperchainBlocksResponse) {
+    option (google.api.http).get = "/nomercychain/nmxchain/hyperchain/chains/{chain_id}/blocks";
+  }
+  
+  // HyperchainTransaction returns a specific transaction in a hyperchain
+  rpc HyperchainTransaction(QueryHyperchainTransactionRequest) returns (QueryHyperchainTransactionResponse) {
+    option (google.api.http).get = "/nomercychain/nmxchain/hyperchain/transactions/{id}";
+  }
+  
+  // HyperchainTransactions returns transactions in a hyperchain
+  rpc HyperchainTransactions(QueryHyperchainTransactionsRequest) returns (QueryHyperchainTransactionsResponse) {
+    option (google.api.http).get = "/nomercychain/nmxchain/hyperchain/chains/{chain_id}/transactions";
+  }
+  
+  // HyperchainBridge returns information about a specific hyperchain bridge
+  rpc HyperchainBridge(QueryHyperchainBridgeRequest) returns (QueryHyperchainBridgeResponse) {
+    option (google.api.http).get = "/nomercychain/nmxchain/hyperchain/bridges/{id}";
+  }
+  
+  // HyperchainBridges returns all hyperchain bridges
+  rpc HyperchainBridges(QueryHyperchainBridgesRequest) returns (QueryHyperchainBridgesResponse) {
+    option (google.api.http).get = "/nomercychain/nmxchain/hyperchain/bridges";
+  }
+  
+  // HyperchainBridgesByChain returns bridges for a specific hyperchain
+  rpc HyperchainBridgesByChain(QueryHyperchainBridgesByChainRequest) returns (QueryHyperchainBridgesByChainResponse) {
+    option (google.api.http).get = "/nomercychain/nmxchain/hyperchain/chains/{chain_id}/bridges";
+  }
+  
+  // HyperchainBridgeTransaction returns a specific hyperchain bridge transaction
+  rpc HyperchainBridgeTransaction(QueryHyperchainBridgeTransactionRequest) returns (QueryHyperchainBridgeTransactionResponse) {
+    option (google.api.http).get = "/nomercychain/nmxchain/hyperchain/bridge-transactions/{id}";
+  }
+  
+  // HyperchainBridgeTransactions returns hyperchain bridge transactions
+  rpc HyperchainBridgeTransactions(QueryHyperchainBridgeTransactionsRequest) returns (QueryHyperchainBridgeTransactionsResponse) {
+    option (google.api.http).get = "/nomercychain/nmxchain/hyperchain/bridges/{bridge_id}/transactions";
+  }
+  
+  // HyperchainPermissions returns permissions for a specific hyperchain
+  rpc HyperchainPermissions(QueryHyperchainPermissionsRequest) returns (QueryHyperchainPermissionsResponse) {
+    option (google.api.http).get = "/nomercychain/nmxchain/hyperchain/chains/{chain_id}/permissions";
+  }
+  
+  // HyperchainPermission returns a specific permission for a hyperchain
+  rpc HyperchainPermission(QueryHyperchainPermissionRequest) returns (QueryHyperchainPermissionResponse) {
+    option (google.api.http).get = "/nomercychain/nmxchain/hyperchain/chains/{chain_id}/permissions/{address}/{permission_type}";
+  }
+}
+
+// QueryHyperchainRequest is the request type for the Query/Hyperchain RPC method
+message QueryHyperchainRequest {
+  string id = 1;
+}
+
+// QueryHyperchainResponse is the response type for the Query/Hyperchain RPC method
+message QueryHyperchainResponse {
+  Hyperchain hyperchain = 1 [(gogoproto.nullable) = false];
+}
+
+// QueryHyperchainsRequest is the request type for the Query/Hyperchains RPC method
+message QueryHyperchainsRequest {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+// QueryHyperchainsResponse is the response type for the Query/Hyperchains RPC method
+message QueryHyperchainsResponse {
+  repeated Hyperchain hyperchains = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+// QueryHyperchainsByCreatorRequest is the request type for the Query/HyperchainsByCreator RPC method
+message QueryHyperchainsByCreatorRequest {
+  string creator = 1;
+  cosmos.base.query.v1beta1.PageRequest pagination = 2;
+}
+
+// QueryHyperchainsByCreatorResponse is the response type for the Query/HyperchainsByCreator RPC method
+message QueryHyperchainsByCreatorResponse {
+  repeated Hyperchain hyperchains = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+// QueryHyperchainsByParentRequest is the request type for the Query/HyperchainsByParent RPC method
+message QueryHyperchainsByParentRequest {
+  string parent_chain_id = 1;
+  cosmos.base.query.v1beta1.PageRequest pagination = 2;
+}
+
+// QueryHyperchainsByParentResponse is the response type for the Query/HyperchainsByParent RPC method
+message QueryHyperchainsByParentResponse {
+  repeated Hyperchain hyperchains = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+// QueryHyperchainValidatorRequest is the request type for the Query/HyperchainValidator RPC method
+message QueryHyperchainValidatorRequest {
+  string chain_id = 1;
+  string address = 2;
+}
+
+// QueryHyperchainValidatorResponse is the response type for the Query/HyperchainValidator RPC method
+message QueryHyperchainValidatorResponse {
+  HyperchainValidator validator = 1 [(gogoproto.nullable) = false];
+}
+
+// QueryHyperchainValidatorsRequest is the request type for the Query/HyperchainValidators RPC method
+message QueryHyperchainValidatorsRequest {
+  string chain_id = 1;
+  cosmos.base.query.v1beta1.PageRequest pagination = 2;
+}
+
+// QueryHyperchainValidatorsResponse is the response type for the Query/HyperchainValidators RPC method
+message QueryHyperchainValidatorsResponse {
+  repeated HyperchainValidator validators = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+// QueryHyperchainBlockRequest is the request type for the Query/HyperchainBlock RPC method
+message QueryHyperchainBlockRequest {
+  string chain_id = 1;
+  uint64 height = 2;
+}
+
+// QueryHyperchainBlockResponse is the response type for the Query/HyperchainBlock RPC method
+message QueryHyperchainBlockResponse {
+  HyperchainBlock block = 1 [(gogoproto.nullable) = false];
+}
+
+// QueryHyperchainBlocksRequest is the request type for the Query/HyperchainBlocks RPC method
+message QueryHyperchainBlocksRequest {
+  string chain_id = 1;
+  cosmos.base.query.v1beta1.PageRequest pagination = 2;
+}
+
+// QueryHyperchainBlocksResponse is the response type for the Query/HyperchainBlocks RPC method
+message QueryHyperchainBlocksResponse {
+  repeated HyperchainBlock blocks = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+// QueryHyperchainTransactionRequest is the request type for the Query/HyperchainTransaction RPC method
+message QueryHyperchainTransactionRequest {
+  string id = 1;
+}
+
+// QueryHyperchainTransactionResponse is the response type for the Query/HyperchainTransaction RPC method
+message QueryHyperchainTransactionResponse {
+  HyperchainTransaction transaction = 1 [(gogoproto.nullable) = false];
+}
+
+// QueryHyperchainTransactionsRequest is the request type for the Query/HyperchainTransactions RPC method
+message QueryHyperchainTransactionsRequest {
+  string chain_id = 1;
+  cosmos.base.query.v1beta1.PageRequest pagination = 2;
+}
+
+// QueryHyperchainTransactionsResponse is the response type for the Query/HyperchainTransactions RPC method
+message QueryHyperchainTransactionsResponse {
+  repeated HyperchainTransaction transactions = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+// QueryHyperchainBridgeRequest is the request type for the Query/HyperchainBridge RPC method
+message QueryHyperchainBridgeRequest {
+  string id = 1;
+}
+
+// QueryHyperchainBridgeResponse is the response type for the Query/HyperchainBridge RPC method
+message QueryHyperchainBridgeResponse {
+  HyperchainBridge bridge = 1 [(gogoproto.nullable) = false];
+}
+
+// QueryHyperchainBridgesRequest is the request type for the Query/HyperchainBridges RPC method
+message QueryHyperchainBridgesRequest {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+// QueryHyperchainBridgesResponse is the response type for the Query/HyperchainBridges RPC method
+message QueryHyperchainBridgesResponse {
+  repeated HyperchainBridge bridges = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+// QueryHyperchainBridgesByChainRequest is the request type for the Query/HyperchainBridgesByChain RPC method
+message QueryHyperchainBridgesByChainRequest {
+  string chain_id = 1;
+  cosmos.base.query.v1beta1.PageRequest pagination = 2;
+}
+
+// QueryHyperchainBridgesByChainResponse is the response type for the Query/HyperchainBridgesByChain RPC method
+message QueryHyperchainBridgesByChainResponse {
+  repeated HyperchainBridge bridges = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+// QueryHyperchainBridgeTransactionRequest is the request type for the Query/HyperchainBridgeTransaction RPC method
+message QueryHyperchainBridgeTransactionRequest {
+  string id = 1;
+}
+
+// QueryHyperchainBridgeTransactionResponse is the response type for the Query/HyperchainBridgeTransaction RPC method
+message QueryHyperchainBridgeTransactionResponse {
+  HyperchainBridgeTransaction transaction = 1 [(gogoproto.nullable) = false];
+}
+
+// QueryHyperchainBridgeTransactionsRequest is the request type for the Query/HyperchainBridgeTransactions RPC method
+message QueryHyperchainBridgeTransactionsRequest {
+  string bridge_id = 1;
+  cosmos.base.query.v1beta1.PageRequest pagination = 2;
+}
+
+// QueryHyperchainBridgeTransactionsResponse is the response type for the Query/HyperchainBridgeTransactions RPC method
+message QueryHyperchainBridgeTransactionsResponse {
+  repeated HyperchainBridgeTransaction transactions = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+// QueryHyperchainPermissionsRequest is the request type for the Query/HyperchainPermissions RPC method
+message QueryHyperchainPermissionsRequest {
+  string chain_id = 1;
+  cosmos.base.query.v1beta1.PageRequest pagination = 2;
+}
+
+// QueryHyperchainPermissionsResponse is the response type for the Query/HyperchainPermissions RPC method
+message QueryHyperchainPermissionsResponse {
+  repeated HyperchainPermission permissions = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+// QueryHyperchainPermissionRequest is the request type for the Query/HyperchainPermission RPC method
+message QueryHyperchainPermissionRequest {
+  string chain_id = 1;
+  string address = 2;
+  string permission_type = 3;
+}
+
+// QueryHyperchainPermissionResponse is the response type for the Query/HyperchainPermission RPC method
+message QueryHyperchainPermissionResponse {
+  HyperchainPermission permission = 1 [(gogoproto.nullable) = false];
+}

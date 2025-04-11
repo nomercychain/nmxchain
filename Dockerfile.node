@@ -1,0 +1,35 @@
+FROM golang:1.18-alpine AS build-env
+
+# Set up dependencies
+RUN apk add --no-cache git make build-base
+
+# Set working directory
+WORKDIR /go/src/github.com/nomercychain/nmxchain
+
+# Add source files
+COPY . .
+
+# Build the application
+RUN go mod download
+RUN make install
+
+# Final image
+FROM alpine:3.15
+
+# Install ca-certificates
+RUN apk add --no-cache ca-certificates bash jq curl
+
+# Copy binary from build-env
+COPY --from=build-env /go/bin/nmxchaind /usr/bin/nmxchaind
+
+# Set working directory
+WORKDIR /root
+
+# Expose ports
+# - 26656: P2P
+# - 26657: RPC
+# - 1317: REST API
+EXPOSE 26656 26657 1317
+
+# Command
+CMD ["nmxchaind", "start"]

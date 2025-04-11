@@ -1,0 +1,243 @@
+syntax = "proto3";
+package nomercychain.nmxchain.hyperchain;
+
+import "gogoproto/gogo.proto";
+import "cosmos/base/v1beta1/coin.proto";
+import "hyperchain/hyperchain.proto";
+
+option go_package = "github.com/nomercychain/nmxchain/x/hyperchain/types";
+
+// Msg defines the Msg service.
+service Msg {
+  // CreateHyperchain creates a new hyperchain
+  rpc CreateHyperchain(MsgCreateHyperchain) returns (MsgCreateHyperchainResponse);
+  
+  // UpdateHyperchain updates an existing hyperchain
+  rpc UpdateHyperchain(MsgUpdateHyperchain) returns (MsgUpdateHyperchainResponse);
+  
+  // JoinHyperchainAsValidator joins a hyperchain as a validator
+  rpc JoinHyperchainAsValidator(MsgJoinHyperchainAsValidator) returns (MsgJoinHyperchainAsValidatorResponse);
+  
+  // LeaveHyperchain leaves a hyperchain as a validator
+  rpc LeaveHyperchain(MsgLeaveHyperchain) returns (MsgLeaveHyperchainResponse);
+  
+  // CreateHyperchainBridge creates a new bridge between hyperchains
+  rpc CreateHyperchainBridge(MsgCreateHyperchainBridge) returns (MsgCreateHyperchainBridgeResponse);
+  
+  // UpdateHyperchainBridge updates an existing hyperchain bridge
+  rpc UpdateHyperchainBridge(MsgUpdateHyperchainBridge) returns (MsgUpdateHyperchainBridgeResponse);
+  
+  // RegisterHyperchainBridgeRelayer registers a relayer for a hyperchain bridge
+  rpc RegisterHyperchainBridgeRelayer(MsgRegisterHyperchainBridgeRelayer) returns (MsgRegisterHyperchainBridgeRelayerResponse);
+  
+  // RemoveHyperchainBridgeRelayer removes a relayer from a hyperchain bridge
+  rpc RemoveHyperchainBridgeRelayer(MsgRemoveHyperchainBridgeRelayer) returns (MsgRemoveHyperchainBridgeRelayerResponse);
+  
+  // InitiateHyperchainBridgeTransaction initiates a transaction through a hyperchain bridge
+  rpc InitiateHyperchainBridgeTransaction(MsgInitiateHyperchainBridgeTransaction) returns (MsgInitiateHyperchainBridgeTransactionResponse);
+  
+  // ApproveHyperchainBridgeTransaction approves a transaction through a hyperchain bridge
+  rpc ApproveHyperchainBridgeTransaction(MsgApproveHyperchainBridgeTransaction) returns (MsgApproveHyperchainBridgeTransactionResponse);
+  
+  // SubmitHyperchainBlock submits a block to a hyperchain
+  rpc SubmitHyperchainBlock(MsgSubmitHyperchainBlock) returns (MsgSubmitHyperchainBlockResponse);
+  
+  // SubmitHyperchainTransaction submits a transaction to a hyperchain
+  rpc SubmitHyperchainTransaction(MsgSubmitHyperchainTransaction) returns (MsgSubmitHyperchainTransactionResponse);
+  
+  // GrantHyperchainPermission grants permission to a hyperchain
+  rpc GrantHyperchainPermission(MsgGrantHyperchainPermission) returns (MsgGrantHyperchainPermissionResponse);
+  
+  // RevokeHyperchainPermission revokes permission from a hyperchain
+  rpc RevokeHyperchainPermission(MsgRevokeHyperchainPermission) returns (MsgRevokeHyperchainPermissionResponse);
+}
+
+// MsgCreateHyperchain defines a message to create a new hyperchain
+message MsgCreateHyperchain {
+  string creator = 1;
+  string name = 2;
+  string description = 3;
+  HyperchainType chain_type = 4;
+  ConsensusType consensus_type = 5;
+  bytes genesis_config = 6;
+  bytes chain_config = 7;
+  bytes metadata = 8;
+  uint64 max_validators = 9;
+  uint64 min_stake = 10;
+  string parent_chain_id = 11;
+  repeated string supported_tokens = 12;
+  repeated string supported_modules = 13;
+  string agent_id = 14;
+  cosmos.base.v1beta1.Coin deposit = 15 [(gogoproto.nullable) = false];
+}
+
+// MsgCreateHyperchainResponse defines the response for MsgCreateHyperchain
+message MsgCreateHyperchainResponse {
+  string id = 1;
+}
+
+// MsgUpdateHyperchain defines a message to update an existing hyperchain
+message MsgUpdateHyperchain {
+  string admin = 1;
+  string chain_id = 2;
+  string name = 3;
+  string description = 4;
+  bytes chain_config = 5;
+  bytes metadata = 6;
+  uint64 max_validators = 7;
+  uint64 min_stake = 8;
+  repeated string supported_tokens = 9;
+  repeated string supported_modules = 10;
+  string agent_id = 11;
+}
+
+// MsgUpdateHyperchainResponse defines the response for MsgUpdateHyperchain
+message MsgUpdateHyperchainResponse {}
+
+// MsgJoinHyperchainAsValidator defines a message to join a hyperchain as a validator
+message MsgJoinHyperchainAsValidator {
+  string validator = 1;
+  string chain_id = 2;
+  string pubkey = 3;
+  cosmos.base.v1beta1.Coin stake = 4 [(gogoproto.nullable) = false];
+  bytes metadata = 5;
+}
+
+// MsgJoinHyperchainAsValidatorResponse defines the response for MsgJoinHyperchainAsValidator
+message MsgJoinHyperchainAsValidatorResponse {}
+
+// MsgLeaveHyperchain defines a message to leave a hyperchain as a validator
+message MsgLeaveHyperchain {
+  string validator = 1;
+  string chain_id = 2;
+}
+
+// MsgLeaveHyperchainResponse defines the response for MsgLeaveHyperchain
+message MsgLeaveHyperchainResponse {}
+
+// MsgCreateHyperchainBridge defines a message to create a new bridge between hyperchains
+message MsgCreateHyperchainBridge {
+  string creator = 1;
+  string source_chain_id = 2;
+  string target_chain_id = 3;
+  uint64 min_relayers = 4;
+  repeated string supported_tokens = 5;
+  bytes metadata = 6;
+}
+
+// MsgCreateHyperchainBridgeResponse defines the response for MsgCreateHyperchainBridge
+message MsgCreateHyperchainBridgeResponse {
+  string id = 1;
+}
+
+// MsgUpdateHyperchainBridge defines a message to update an existing hyperchain bridge
+message MsgUpdateHyperchainBridge {
+  string admin = 1;
+  string bridge_id = 2;
+  uint64 min_relayers = 3;
+  repeated string supported_tokens = 4;
+  bytes metadata = 5;
+}
+
+// MsgUpdateHyperchainBridgeResponse defines the response for MsgUpdateHyperchainBridge
+message MsgUpdateHyperchainBridgeResponse {}
+
+// MsgRegisterHyperchainBridgeRelayer defines a message to register a relayer for a hyperchain bridge
+message MsgRegisterHyperchainBridgeRelayer {
+  string admin = 1;
+  string bridge_id = 2;
+  string relayer = 3;
+}
+
+// MsgRegisterHyperchainBridgeRelayerResponse defines the response for MsgRegisterHyperchainBridgeRelayer
+message MsgRegisterHyperchainBridgeRelayerResponse {}
+
+// MsgRemoveHyperchainBridgeRelayer defines a message to remove a relayer from a hyperchain bridge
+message MsgRemoveHyperchainBridgeRelayer {
+  string admin = 1;
+  string bridge_id = 2;
+  string relayer = 3;
+}
+
+// MsgRemoveHyperchainBridgeRelayerResponse defines the response for MsgRemoveHyperchainBridgeRelayer
+message MsgRemoveHyperchainBridgeRelayerResponse {}
+
+// MsgInitiateHyperchainBridgeTransaction defines a message to initiate a transaction through a hyperchain bridge
+message MsgInitiateHyperchainBridgeTransaction {
+  string sender = 1;
+  string bridge_id = 2;
+  string recipient = 3;
+  cosmos.base.v1beta1.Coin amount = 4 [(gogoproto.nullable) = false];
+  string source_tx_id = 5;
+  bytes metadata = 6;
+}
+
+// MsgInitiateHyperchainBridgeTransactionResponse defines the response for MsgInitiateHyperchainBridgeTransaction
+message MsgInitiateHyperchainBridgeTransactionResponse {
+  string id = 1;
+}
+
+// MsgApproveHyperchainBridgeTransaction defines a message to approve a transaction through a hyperchain bridge
+message MsgApproveHyperchainBridgeTransaction {
+  string relayer = 1;
+  string bridge_id = 2;
+  string tx_id = 3;
+}
+
+// MsgApproveHyperchainBridgeTransactionResponse defines the response for MsgApproveHyperchainBridgeTransaction
+message MsgApproveHyperchainBridgeTransactionResponse {
+  string target_tx_id = 1;
+}
+
+// MsgSubmitHyperchainBlock defines a message to submit a block to a hyperchain
+message MsgSubmitHyperchainBlock {
+  string proposer = 1;
+  string chain_id = 2;
+  uint64 height = 3;
+  string parent_hash = 4;
+  uint64 num_txs = 5;
+  bytes data = 6;
+}
+
+// MsgSubmitHyperchainBlockResponse defines the response for MsgSubmitHyperchainBlock
+message MsgSubmitHyperchainBlockResponse {
+  string hash = 1;
+}
+
+// MsgSubmitHyperchainTransaction defines a message to submit a transaction to a hyperchain
+message MsgSubmitHyperchainTransaction {
+  string sender = 1;
+  string chain_id = 2;
+  string recipient = 3;
+  cosmos.base.v1beta1.Coin amount = 4 [(gogoproto.nullable) = false];
+  bytes data = 5;
+}
+
+// MsgSubmitHyperchainTransactionResponse defines the response for MsgSubmitHyperchainTransaction
+message MsgSubmitHyperchainTransactionResponse {
+  string id = 1;
+}
+
+// MsgGrantHyperchainPermission defines a message to grant permission to a hyperchain
+message MsgGrantHyperchainPermission {
+  string admin = 1;
+  string chain_id = 2;
+  string address = 3;
+  string permission_type = 4;
+  uint64 expiration_days = 5;
+  bytes metadata = 6;
+}
+
+// MsgGrantHyperchainPermissionResponse defines the response for MsgGrantHyperchainPermission
+message MsgGrantHyperchainPermissionResponse {}
+
+// MsgRevokeHyperchainPermission defines a message to revoke permission from a hyperchain
+message MsgRevokeHyperchainPermission {
+  string admin = 1;
+  string chain_id = 2;
+  string address = 3;
+  string permission_type = 4;
+}
+
+// MsgRevokeHyperchainPermissionResponse defines the response for MsgRevokeHyperchainPermission
+message MsgRevokeHyperchainPermissionResponse {}

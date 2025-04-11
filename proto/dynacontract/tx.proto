@@ -1,0 +1,162 @@
+syntax = "proto3";
+package nomercychain.nmxchain.dynacontract;
+
+import "gogoproto/gogo.proto";
+import "cosmos/base/v1beta1/coin.proto";
+import "dynacontract/dynacontract.proto";
+
+option go_package = "github.com/nomercychain/nmxchain/x/dynacontract/types";
+
+// Msg defines the Msg service.
+service Msg {
+  // CreateDynaContract creates a new dynamic contract
+  rpc CreateDynaContract(MsgCreateDynaContract) returns (MsgCreateDynaContractResponse);
+  
+  // UpdateDynaContract updates an existing dynamic contract
+  rpc UpdateDynaContract(MsgUpdateDynaContract) returns (MsgUpdateDynaContractResponse);
+  
+  // ExecuteDynaContract executes a dynamic contract
+  rpc ExecuteDynaContract(MsgExecuteDynaContract) returns (MsgExecuteDynaContractResponse);
+  
+  // AddLearningData adds learning data to a dynamic contract
+  rpc AddLearningData(MsgAddLearningData) returns (MsgAddLearningDataResponse);
+  
+  // CreateDynaContractTemplate creates a new dynamic contract template
+  rpc CreateDynaContractTemplate(MsgCreateDynaContractTemplate) returns (MsgCreateDynaContractTemplateResponse);
+  
+  // InstantiateFromTemplate creates a new dynamic contract from a template
+  rpc InstantiateFromTemplate(MsgInstantiateFromTemplate) returns (MsgInstantiateFromTemplateResponse);
+  
+  // GrantContractPermission grants permission to a dynamic contract
+  rpc GrantContractPermission(MsgGrantContractPermission) returns (MsgGrantContractPermissionResponse);
+  
+  // RevokeContractPermission revokes permission from a dynamic contract
+  rpc RevokeContractPermission(MsgRevokeContractPermission) returns (MsgRevokeContractPermissionResponse);
+}
+
+// MsgCreateDynaContract defines a message to create a new dynamic contract
+message MsgCreateDynaContract {
+  string creator = 1;
+  string name = 2;
+  string description = 3;
+  DynaContractType contract_type = 4;
+  bytes code = 5;
+  bytes abi = 6;
+  string agent_id = 7;
+  bytes metadata = 8;
+  repeated string tags = 9;
+  uint64 gas_limit = 10;
+  cosmos.base.v1beta1.Coin deposit = 11 [(gogoproto.nullable) = false];
+}
+
+// MsgCreateDynaContractResponse defines the response for MsgCreateDynaContract
+message MsgCreateDynaContractResponse {
+  string id = 1;
+}
+
+// MsgUpdateDynaContract defines a message to update a dynamic contract
+message MsgUpdateDynaContract {
+  string owner = 1;
+  string contract_id = 2;
+  string name = 3;
+  string description = 4;
+  bytes code = 5;
+  bytes abi = 6;
+  string agent_id = 7;
+  bytes metadata = 8;
+  repeated string tags = 9;
+  uint64 gas_limit = 10;
+}
+
+// MsgUpdateDynaContractResponse defines the response for MsgUpdateDynaContract
+message MsgUpdateDynaContractResponse {}
+
+// MsgExecuteDynaContract defines a message to execute a dynamic contract
+message MsgExecuteDynaContract {
+  string caller = 1;
+  string contract_id = 2;
+  bytes input = 3;
+  cosmos.base.v1beta1.Coin fee = 4 [(gogoproto.nullable) = false];
+  uint64 gas_limit = 5;
+}
+
+// MsgExecuteDynaContractResponse defines the response for MsgExecuteDynaContract
+message MsgExecuteDynaContractResponse {
+  string execution_id = 1;
+  bytes output = 2;
+  uint64 gas_used = 3;
+}
+
+// MsgAddLearningData defines a message to add learning data to a dynamic contract
+message MsgAddLearningData {
+  string owner = 1;
+  string contract_id = 2;
+  string data_type = 3;
+  bytes data = 4;
+  string source = 5;
+  bytes metadata = 6;
+}
+
+// MsgAddLearningDataResponse defines the response for MsgAddLearningData
+message MsgAddLearningDataResponse {
+  string data_id = 1;
+}
+
+// MsgCreateDynaContractTemplate defines a message to create a new dynamic contract template
+message MsgCreateDynaContractTemplate {
+  string creator = 1;
+  string name = 2;
+  string description = 3;
+  DynaContractType contract_type = 4;
+  bytes code = 5;
+  bytes abi = 6;
+  bytes metadata = 7;
+  repeated string tags = 8;
+}
+
+// MsgCreateDynaContractTemplateResponse defines the response for MsgCreateDynaContractTemplate
+message MsgCreateDynaContractTemplateResponse {
+  string id = 1;
+}
+
+// MsgInstantiateFromTemplate defines a message to create a new dynamic contract from a template
+message MsgInstantiateFromTemplate {
+  string creator = 1;
+  string template_id = 2;
+  string name = 3;
+  string description = 4;
+  string agent_id = 5;
+  bytes metadata = 6;
+  repeated string tags = 7;
+  uint64 gas_limit = 8;
+  cosmos.base.v1beta1.Coin deposit = 9 [(gogoproto.nullable) = false];
+}
+
+// MsgInstantiateFromTemplateResponse defines the response for MsgInstantiateFromTemplate
+message MsgInstantiateFromTemplateResponse {
+  string id = 1;
+}
+
+// MsgGrantContractPermission defines a message to grant permission to a dynamic contract
+message MsgGrantContractPermission {
+  string owner = 1;
+  string contract_id = 2;
+  string address = 3;
+  string permission_type = 4;
+  uint64 expiration_days = 5;
+  bytes metadata = 6;
+}
+
+// MsgGrantContractPermissionResponse defines the response for MsgGrantContractPermission
+message MsgGrantContractPermissionResponse {}
+
+// MsgRevokeContractPermission defines a message to revoke permission from a dynamic contract
+message MsgRevokeContractPermission {
+  string owner = 1;
+  string contract_id = 2;
+  string address = 3;
+  string permission_type = 4;
+}
+
+// MsgRevokeContractPermissionResponse defines the response for MsgRevokeContractPermission
+message MsgRevokeContractPermissionResponse {}
